@@ -44,13 +44,13 @@ const TrendChart = () => {
 
     const options = {
         chart: {
-            zoomType: 'x' // Enable zooming on the x-axis
+            zoomType: 'x' 
         },
         credits: {
-            enabled: false // Disable the credits
+            enabled: false 
         },
         legend: {
-            enabled: false // Disable the legend
+            enabled: false 
         },
         title: {
             text: ''

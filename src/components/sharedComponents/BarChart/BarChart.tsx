@@ -22,9 +22,11 @@ import styles from './BarChart.module.scss'
 
 import data from '../../../Data/mock-request-data.json'
 
-interface Props { }
+interface Props {
+    setStatusSelect: (val:string) => void
+}
 
-function BarChart({}: Props) {
+function BarChart({statusSelect, setStatusSelect}: Props) {
 
     const statusCounts = data.reduce((acc, curr) => {
         const statusCode = `${curr.status_code}`;
@@ -41,42 +43,91 @@ function BarChart({}: Props) {
     const options = {
         chart: {
             type: 'bar',
-            height: 200 
+            height: 300 
         },
         credits: {
-            enabled: false // Disable the credits
+            enabled: false 
         },
         title: {
             text: ''
         },
         legend: {
-            enabled: false // Disable the legend
+            enabled: false 
+        },
+        tooltip: {
+            enabled: false 
         },
         xAxis: {
-            categories: ['2xx', '4xx', '5xx'], // Categories for the x-axis
+            categories: ['2xx', '4xx', '5xx'], 
             title: {
-                text: null // No title for the y-axis
+                text: null 
             },
             labels: {
-                enabled: false // Hide y-axis labels
+                enabled: false 
             }
         },
         yAxis: {
             min: 0,
             title: {
-                text: null // No title for the y-axis
+                text: null 
             },
             labels: {
-                enabled: false // Hide y-axis labels
+                enabled: false 
             }
+        },
+        plotOptions: {
+            series: {
+                cursor: 'pointer', 
+                dataLabels: {
+                    enabled: true, 
+                    format: '{point.y}', 
+                    style: {
+                        fontWeight: 'bold',
+                        color: '#000', 
+                    },
+                    verticalAlign: 'bottom', 
+                    y: -5 
+                },
+                point: {
+                    events: {
+                        click: function () {
+                            setStatusSelect(this.category); 
+                        },
+                    },
+                },
+                
+            },
         },
         series: [{
             data: [
-                { y: statusCounts['2xx'], color: '#28a745' }, 
-                { y: statusCounts['4xx'], color: '#ffc107' }, 
-                { y: statusCounts['5xx'], color: '#dc3545' }  
-            ]
-            
+                { 
+                    y: statusCounts['2xx'], 
+                    color: '#28a745', 
+                    borderColor: statusSelect === '2xx' ? '#000aff' : 'transparent', 
+                    borderWidth: statusSelect === '2xx' ? 2 : 0 
+                }, 
+                { 
+                    y: statusCounts['4xx'], 
+                    color: '#ffc107', 
+                    borderColor: statusSelect === '4xx' ? '#000aff' : 'transparent', 
+                    borderWidth: statusSelect === '4xx' ? 2 : 0 
+                }, 
+                { 
+                    y: statusCounts['5xx'], 
+                    color: '#dc3545', 
+                    borderColor: statusSelect === '5xx' ? '#000aff' : 'transparent', 
+                    borderWidth: statusSelect === '5xx' ? 2 : 0 
+                }  
+            ],
+            point: {
+                events: {
+                    click: function () {
+                        setStatusSelect((prev)=>{
+                            return prev === this.category ? null : this.category
+                        }); 
+                    },
+                },
+            },            
         }]
     };
 
