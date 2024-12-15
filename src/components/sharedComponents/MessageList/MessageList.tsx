@@ -40,24 +40,30 @@ function MessageList({ messageList }: Props) {
     const cellRenderer = ({ columnIndex, key, rowIndex, style }) => {
         const message = formattedMessages[rowIndex];
         let cellContent;
-
+        let textColor = 'black'; 
+        let justifyContent = 'center'; 
+    
         switch (columnIndex) {
             case 0:
                 cellContent = message.status_code;
                 break;
             case 1:
                 cellContent = message.path;
+                textColor = '#2563eb'; 
                 break;
             case 2:
                 cellContent = message.error;
+                textColor = '#dc2626'; 
+                justifyContent = 'flex-start';
                 break;
             case 3:
                 cellContent = message.formattedTimestamp;
+                justifyContent = 'flex-end';
                 break;
             default:
                 cellContent = '';
         }
-
+    
         return (
             <div
                 key={key}
@@ -67,7 +73,8 @@ function MessageList({ messageList }: Props) {
                     backgroundColor: rowIndex % 2 ? '#f9f9f9' : 'white',
                     display: 'flex',
                     alignItems: 'center',
-                    justifyContent: 'center'
+                    justifyContent: justifyContent,
+                    color: textColor
                 }}
             >
                 {cellContent}
@@ -87,8 +94,10 @@ function MessageList({ messageList }: Props) {
                 <div className={styles.headerRow}>
                     <div className={styles.headerItem} style={{ width: columnWidth({ index: 0 }) }}>Status Code</div>
                     <div className={styles.headerItem} style={{ width: columnWidth({ index: 1 }) }}>Path</div>
-                    <div className={styles.headerItem} style={{ width: columnWidth({ index: 2 }) }}>Error</div>
-                    <div className={styles.headerItem} style={{ width: columnWidth({ index: 3 }) }}>Timestamp</div>
+                    <div className={classNames(styles.headerItem, styles.errorCell)} style={{ width: columnWidth({ index: 2 }) }}>Error</div>
+                    <div className={classNames(styles.headerItem, styles.timestampCell)} style={{ width: columnWidth({ index: 3 }) }}>Timestamp
+                        <i className="fa-duotone fa-solid fa-sort-down"></i>
+                    </div>
                 </div>
                 <Grid
                     cellRenderer={cellRenderer}

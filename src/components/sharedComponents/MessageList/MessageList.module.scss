@@ -61,6 +61,18 @@
     text-align: center; 
 }
 
+.timestampCell{
+    display: flex;
+    justify-content: flex-end;
+    i{
+        margin-left: 4px;
+    }
+}
+
+.errorCell{
+    display: flex;
+    justify-content: flex-start;   
+}
 .gridItem {
     display: flex; 
     align-items: center; 
