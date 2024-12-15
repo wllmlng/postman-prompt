@@ -4,12 +4,13 @@
     height: 120px;
     justify-content: center;
     align-items: flex-start;
-    padding: 20px;
-    gap: 6px;
+    padding: 10px 20px;
+    gap: 12px;
     color: grey;
 
     div{
         font-size: 28px;
         font-weight: 600;
+        height: 64px;
     }
 }

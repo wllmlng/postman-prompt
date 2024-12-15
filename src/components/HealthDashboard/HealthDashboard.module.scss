@@ -5,6 +5,8 @@
     gap: 10px;
     
     h1{
+        align-items: flex-start;
+        display: flex;    
         font-size: 40px;
         margin: 0;
         font-weight: 500;
@@ -20,7 +22,13 @@
     }
     .summaryContainer{
         display: grid;
-        grid-template-columns: auto auto auto auto;
+        grid-template-columns: repeat(4, 1fr);
         gap: 14px;
+    }
+
+    .bottomCharts{
+        gap: 14px;
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
     }
 }

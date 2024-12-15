@@ -1,7 +1,6 @@
 .App {
   text-align: center;
   background: #dbdbdb69;
-  height: 100vh;
 }
 
 .generic-container{
@@ -12,4 +11,12 @@
 
 .font-light{
   color: grey;  
+}
+
+.sub-title{
+  color: #514e4e;
+  font-size: 20px;
+  padding: 12px;
+  margin: 0;
+  display: flex
 }

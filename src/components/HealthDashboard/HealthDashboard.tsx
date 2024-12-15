@@ -10,6 +10,8 @@ import classNames from 'classnames';
 //Components
 import MetricCard from '@sharedComponents/MetricCard/MetricCard.tsx';
 import Button from '@sharedComponents/Button/Button.tsx'
+import TrendChart from '@sharedComponents/TrendChart/TrendChart.tsx'
+import BarChart from '@sharedComponents/BarChart/BarChart.tsx';
 //Types
 
 //Constants
@@ -62,7 +64,7 @@ function HealthDashboard({}: Props) {
     ]
     return (
         <div className={styles.healthDashboard}>
-            <h4>API Health Dashboard</h4>
+            <h1>API Health Dashboard</h1>
             <div className={classNames(styles.toggleContainer, 'generic-container')}>
                 {VIEWS.map(({label, value}) => {
                     return <Button label={label} value={value} />
@@ -72,6 +74,11 @@ function HealthDashboard({}: Props) {
                 {summarySec.map(({label, metric, color})=>{
                     return <MetricCard label={label} metric={metric} color={color}/>
                 })}
+            </div>
+            <TrendChart />
+            <div className={styles.bottomCharts}>
+                <BarChart />
+                <BarChart />
             </div>
         </div>
     )
