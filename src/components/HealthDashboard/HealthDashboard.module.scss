@@ -1,0 +1,26 @@
+.healthDashboard{
+    padding: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    
+    h1{
+        font-size: 40px;
+        margin: 0;
+        font-weight: 500;
+        border-bottom: 1px solid #80808085;
+        padding-bottom: 10px;
+    }
+
+    .toggleContainer{
+        display: flex;
+        padding: 12px;
+        gap: 10px;
+
+    }
+    .summaryContainer{
+        display: grid;
+        grid-template-columns: auto auto auto auto;
+        gap: 14px;
+    }
+}

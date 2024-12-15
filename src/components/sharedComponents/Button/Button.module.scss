@@ -1,0 +1,17 @@
+.button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: white;
+    transition: background-color 0.3s;
+
+    &:hover {
+        background-color: grey; 
+        color: white;
+    }
+}
+
+.toggled {
+    background-color: lightgreen;
+}

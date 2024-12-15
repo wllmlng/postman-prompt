@@ -1,0 +1,68 @@
+@import 'mixins.scss';
+@import 'constants.scss';
+
+$lightState: lighten(#476c8e, 20%);
+$darkState: $defaultBackgroundColor;
+
+.overlay {
+  @extend %overlay;
+  align-items: center;
+  background-color: var(--themewhite);
+  display: flex;
+  opacity: 0.85;
+  justify-content: center;
+  z-index: 10;
+  border-radius: $panelBorderRadius;
+}
+
+@keyframes throbber-loader {
+  0% {
+    background: $lightState;
+  }
+  10% {
+    background: $darkState;
+  }
+  40% {
+    background: $lightState;
+  }
+}
+
+.throbberLoader:not(:required) {
+  animation: throbber-loader 2000ms 300ms infinite ease-out;
+  background: $lightState;
+  display: inline-block;
+  height: 1.5em;
+  margin: 0 1.6em;
+  position: relative;
+  text-indent: -9999px;
+  width: 0.9em;
+}
+.throbberLoader:not(:required):before,
+.throbberLoader:not(:required):after {
+  background: $lightState;
+  content: '\x200B';
+  display: inline-block;
+  height: 1.5em;
+  position: absolute;
+  top: 0;
+  width: 0.9em;
+}
+.throbberLoader:not(:required):before {
+  animation: throbber-loader 2000ms 150ms infinite ease-out;
+  left: -1.6em;
+}
+.throbberLoader:not(:required):after {
+  animation: throbber-loader 2000ms 450ms infinite ease-out;
+  right: -1.6em;
+}
+
+.container {
+  text-align: center;
+  font-size: 1em;
+}
+
+@media print {
+  .container {
+    display: none;
+  }
+}

@@ -1,0 +1,15 @@
+.App {
+  text-align: center;
+  background: #dbdbdb69;
+  height: 100vh;
+}
+
+.generic-container{
+  background: #ffffff;
+  border: 1px solid lightgray;
+  border-radius: 6px;
+}
+
+.font-light{
+  color: grey;  
+}
