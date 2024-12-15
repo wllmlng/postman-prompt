@@ -4,6 +4,7 @@ import classNames from 'classnames';
 //Api Calls
 
 //Utils
+import { calculateSuccessRate, calculateAverageResponseTime, calculateErrorRate, abbreviateNumber } from './utils.ts';
 
 //Hooks
 
@@ -46,28 +47,53 @@ interface Props {
 function HealthDashboard({}: Props) {
     const [statusSelect, setStatusSelect] = useState<StatusSelect>('5xx');
 
+    
     const summarySec = [
         {
             label: "Success Rate",
-            metric: "98.2%",
-            color: 'green'
+            metric: `${calculateSuccessRate(data)}%`,
+            color: 'green',
+            info: "Success Rate = (Successful Requests / Total Requests) × 100"
         },
         {
             label: "Ave Response Time",
-            metric: "245ms",
-            color: 'blue'
+            metric: `${calculateAverageResponseTime(data)}ms`,
+            color: 'blue',
+            info: "Average Response Time = Total Response Time (ms) / Total Number of Requests"
         },
         {
             label: "Error Rate",
-            metric: "1.8%",
-            color: 'red'
+            metric: `${calculateErrorRate(data)}%`,
+            color: 'red',
+            info: "Error Rate = (Number of Error Responses / Total Requests) × 100. Error responses are any requests with status codes 400 or higher"
         },
         {
             label: "Total Requests",
-            metric: "12.5K",
+            metric: `${abbreviateNumber(data?.length)}`,
             color: 'purple'
         },
     ]
+    
+    // Example usage:
+    const sampleData = [
+        {
+            error: "",
+            path: "/",
+            response_time: 852,
+            status_code: 201,
+            timestamp: "2023-09-01T01:09:24.000Z"
+        },
+        {
+            error: "ERR_HTTP2_ERROR",
+            path: "/",
+            response_time: 792,
+            status_code: 500,
+            timestamp: "2023-09-01T01:14:48.000Z"
+        }
+    ];
+    
+    const successRate = calculateSuccessRate(sampleData);
+    console.log(`Success Rate: ${successRate}%`); // Output: Success Rate: 50%
 
     const messageList = useMemo(() => {
         if(!statusSelect) return data;
@@ -88,8 +114,8 @@ function HealthDashboard({}: Props) {
                 })}
             </div>
             <div className={styles.summaryContainer}>
-                {summarySec.map(({label, metric, color})=>{
-                    return <MetricCard label={label} metric={metric} color={color}/>
+                {summarySec.map(({label, metric, color, info})=>{
+                    return <MetricCard label={label} metric={metric} color={color} info={info}/>
                 })}
             </div>
             <TrendChart />

@@ -8,6 +8,7 @@ import classNames from 'classnames'
 //Hooks
 
 //Components
+import HoverInfo from '@sharedComponents/HoverInfo/HoverInfo.tsx'
 
 //Types
 
@@ -22,16 +23,22 @@ interface Props {
     label: string;
     metric: string;
     color: string;
+    info?: string;
 }
 
-function MetricCard({label, metric, color}: Props) {
+function MetricCard({label, metric, color, info}: Props) {
 
     return (
         <div className={classNames(styles.container, 'generic-container')}>
             <span>
                 {label}
+                {info && 
+                    <HoverInfo text={info}>
+                        <i className="fa-solid fa-circle-info"></i>
+                    </HoverInfo>
+                }
             </span>
-            <div style={{color: color}}>
+            <div className={styles.metricContainer} style={{color: color}}>
                 {metric}
             </div>
         </div>
