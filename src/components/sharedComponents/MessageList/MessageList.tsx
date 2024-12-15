@@ -1,20 +1,10 @@
-//External Libraries
-import React, { useState, useEffect, useRef } from 'react';
-import { List } from 'react-virtualized';
-//Api Calls
-
-//Utils
-
-//Hooks
-
-//Components
-
-//Types
-
-//Constants
-
-//Styles
-import styles from './MessageList.module.scss'
+// External Libraries
+import React, { useMemo, useState, useEffect, useRef } from 'react';
+import { Grid } from 'react-virtualized';
+import 'react-virtualized/styles.css'; // Import styles for react-virtualized
+import classNames from 'classnames';
+// Styles
+import styles from './MessageList.module.scss';
 
 //-----------------End Imports-----------------
 
@@ -38,36 +28,76 @@ function MessageList({ messageList }: Props) {
         }
     }, [listRef]);
 
-    const formattedMessages = messageList
-    .map(({ status_code, error, path, timestamp }) => {
-        const formattedTimestamp = new Date(timestamp).toLocaleString();
-        return { status_code, error, path, formattedTimestamp, timestamp }; 
-    })
-    .sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()); 
+    const formattedMessages = useMemo(() => {
+        return messageList
+            .sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime())
+            .map(({ status_code, error, path, timestamp }) => {
+                const formattedTimestamp = new Date(timestamp).toLocaleString();
+                return { status_code, error, path, formattedTimestamp }; 
+            }); 
+    },[messageList]) 
 
-    const rowRenderer = ({ key, index, style }) => {
-        const message = formattedMessages[index];
+    const cellRenderer = ({ columnIndex, key, rowIndex, style }) => {
+        const message = formattedMessages[rowIndex];
+        let cellContent;
+
+        switch (columnIndex) {
+            case 0:
+                cellContent = message.status_code;
+                break;
+            case 1:
+                cellContent = message.path;
+                break;
+            case 2:
+                cellContent = message.error;
+                break;
+            case 3:
+                cellContent = message.formattedTimestamp;
+                break;
+            default:
+                cellContent = '';
+        }
+
         return (
-            <div key={key} style={style} className={styles.gridItem}>
-                <div className={styles.statusCode}>{message.status_code}</div>
-                <div className={styles.path}>{message.path}</div>
-                <div className={styles.error}>{message.error}</div>
-                <div className={styles.timestamp}>{message.formattedTimestamp}</div>
+            <div
+                key={key}
+                style={{
+                    ...style,
+                    border: '1px solid #ddd',
+                    backgroundColor: rowIndex % 2 ? '#f9f9f9' : 'white',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center'
+                }}
+            >
+                {cellContent}
             </div>
         );
     };
 
+    const columnWidth = () => {
+        const numberOfColumns = 4; 
+        return Math.floor(listWidth / numberOfColumns); 
+    };
+
     return (
-        <div ref={listRef} className={'generic-container'} style={{ width: '100%' }}>
+        <div ref={listRef} className={classNames(styles.messageList ,'generic-container')} style={{ width: '100%', overflow: 'scroll' }}>
             <h4 className="sub-title">Recent Messages</h4>
-            <div style={{ padding: '12px' }}>
-                <List
-                    width={listWidth-25}
+            <div>
+                <div className={styles.headerRow}>
+                    <div className={styles.headerItem} style={{ width: columnWidth({ index: 0 }) }}>Status Code</div>
+                    <div className={styles.headerItem} style={{ width: columnWidth({ index: 1 }) }}>Path</div>
+                    <div className={styles.headerItem} style={{ width: columnWidth({ index: 2 }) }}>Error</div>
+                    <div className={styles.headerItem} style={{ width: columnWidth({ index: 3 }) }}>Timestamp</div>
+                </div>
+                <Grid
+                    cellRenderer={cellRenderer}
+                    columnCount={4} 
+                    columnWidth={columnWidth} 
                     height={300} 
-                    rowCount={formattedMessages.length}
+                    rowCount={formattedMessages.length} 
                     rowHeight={40} 
-                    rowRenderer={rowRenderer}
-                    overscanRowCount={5}
+                    width={listWidth} 
                 />
             </div>
         </div>

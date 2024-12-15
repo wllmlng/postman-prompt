@@ -1,6 +1,5 @@
 .messageRow{
     display: flex;
-    // justify-content:space-around;
     justify-content: space-between;
     border-bottom: 1px solid #ccc;
 }
@@ -24,49 +23,11 @@
 
 
 
-//test
-// .gridContainer {
-//     display: grid;
-//     grid-template-columns: repeat(4, 1fr); // Four columns for each piece of information
-//     gap: 10px; // Space between grid items
-// }
-
-// .gridItem {
-//     display: contents; // Use contents to allow direct children to be grid items
-// }
-
-// .statusCode, .path, .error, .timestamp {
-//     background-color: #f9f9f9; // Background color for each item
-//     padding: 10px;
-//     border: 1px solid #ddd; // Border for each item
-//     border-radius: 4px; // Rounded corners
-// }
-
-// .statusCode {
-//     font-weight: bold;
-// }
-
-// .path {
-//     color: #007bff; // Bootstrap primary color
-// }
-
-// .error {
-//     color: #dc3545; // Bootstrap danger color
-// }
-
-// .timestamp {
-//     font-size: 0.9em;
-//     color: #666;
-// }
-
-
-
-
 .gridItem {
     display: flex;
-    justify-content: space-between; // Align items in a row
-    border-bottom: 1px solid #ddd; // Border for each item
-    background-color: #f9f9f9; // Background color for each item
+    justify-content: space-between; 
+    border-bottom: 1px solid #ddd; 
+    background-color: #f9f9f9; 
 }
 
 .statusCode {
@@ -74,14 +35,35 @@
 }
 
 .path {
-    color: #007bff; // Bootstrap primary color
+    color: #007bff; 
 }
 
 .error {
-    color: #dc3545; // Bootstrap danger color
+    color: #dc3545; 
 }
 
 .timestamp {
     font-size: 0.9em;
     color: #666;
+}
+
+
+
+.headerRow {
+    display: flex; 
+    font-weight: bold; 
+    background-color: #f0f0f0; 
+    border-bottom: 2px solid #ddd; 
+    padding: 10px 0; 
+}
+
+.headerItem {
+    text-align: center; 
+}
+
+.gridItem {
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    height: 100%; 
 }
