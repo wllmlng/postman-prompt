@@ -25,20 +25,6 @@ import styles from './HealthDashboard.module.scss'
 
 //-----------------End Imports-----------------
 
-const VIEWS = [
-    {
-        label: 'Time Range',
-        value: 'time'
-    },
-    {
-        label: 'Endpoint',
-        value: 'endpoint'
-    },
-    {
-        label: 'Status',
-        value: 'status'
-    },
-]
 
 type StatusSelect = '2xx' | '4xx' | '5xx' | null;
 interface Props {
@@ -59,7 +45,42 @@ function HealthDashboard({}: Props) {
         },3000)
     },[])
 
+    const dropdownOptions = useMemo(() => {
+        const timeOptions = [
+            ...new Set(data.map(item => {
+                return new Date(item.timestamp).toLocaleString('en-US', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    second: '2-digit',
+                    hour12: true
+                });
+            }))
+        ]; 
+        const endpointOptions = [...new Set(data.map(item => item.path))]; 
+        const statusOptions = [...new Set(data.map(item => item.status_code.toString().charAt(0) + 'xx'))]; 
     
+        return [
+            {
+                label: 'Time Range',
+                value: 'time',
+                options: timeOptions.map(time => ({ label: time, value: time })), 
+            },
+            {
+                label: 'Endpoint',
+                value: 'endpoint',
+                options: endpointOptions.map(endpoint => ({ label: endpoint, value: endpoint })), 
+            },
+            {
+                label: 'Status',
+                value: 'status',
+                options: statusOptions.map(status => ({ label: status, value: status })), 
+            },
+        ];
+    }, [data]);
+
     const summarySec = useMemo(()=>{
         return [
             {
@@ -102,8 +123,8 @@ function HealthDashboard({}: Props) {
         <div className={styles.healthDashboard}>
             <h1>API Health Dashboard</h1>
             <div className={classNames(styles.toggleContainer, 'generic-container')}>
-                {VIEWS.map(({label, value}) => {
-                    return <Button label={label} value={value} disabled={loading} />
+                {dropdownOptions.map(({label, value, options}) => {
+                    return <Button options={options} label={label} value={value} disabled={loading} />
                 })}
             </div>
             <div className={styles.summaryContainer}>
