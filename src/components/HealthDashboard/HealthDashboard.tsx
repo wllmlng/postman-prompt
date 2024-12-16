@@ -47,7 +47,7 @@ function HealthDashboard({}: Props) {
 
     const dropdownOptions = useMemo(() => {
         const timeOptions = [
-            ...new Set(data.map(item => {
+            ...new Set(mockData.map(item => {
                 return new Date(item.timestamp).toLocaleString('en-US', {
                     year: 'numeric',
                     month: 'long',
@@ -59,14 +59,15 @@ function HealthDashboard({}: Props) {
                 });
             }))
         ]; 
-        const endpointOptions = [...new Set(data.map(item => item.path))]; 
-        const statusOptions = [...new Set(data.map(item => item.status_code.toString().charAt(0) + 'xx'))]; 
+        const endpointOptions = [...new Set(mockData.map(item => item.path))]; 
+        const statusOptions = [...new Set(mockData.map(item => item.status_code.toString().charAt(0) + 'xx'))]; 
     
         return [
             {
                 label: 'Time Range',
                 value: 'time',
                 options: timeOptions.map(time => ({ label: time, value: time })), 
+                includeSearch: true
             },
             {
                 label: 'Endpoint',
@@ -79,7 +80,7 @@ function HealthDashboard({}: Props) {
                 options: statusOptions.map(status => ({ label: status, value: status })), 
             },
         ];
-    }, [data]);
+    }, []);
 
     const summarySec = useMemo(()=>{
         return [
@@ -123,8 +124,8 @@ function HealthDashboard({}: Props) {
         <div className={styles.healthDashboard}>
             <h1>API Health Dashboard</h1>
             <div className={classNames(styles.toggleContainer, 'generic-container')}>
-                {dropdownOptions.map(({label, value, options}) => {
-                    return <Button options={options} label={label} value={value} disabled={loading} />
+                {dropdownOptions.map(({label, value, options, includeSearch}) => {
+                    return <Button options={options} label={label} value={value} disabled={loading} includeSearch={includeSearch}/>
                 })}
             </div>
             <div className={styles.summaryContainer}>

@@ -2,9 +2,10 @@ import React, { useState } from 'react';
 import styles from './Button.module.scss';
 import useOnClickOut from '@hooks/useOnClickOut.tsx';
 
-const Button = ({ label, options, disabled }) => {
+const Button = ({ label, options, disabled, includeSearch=false }) => {
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-    const [selectedOption, setSelectedOption] = useState(label); // Default to the label
+    const [selectedOption, setSelectedOption] = useState(label);
+    const [searchTerm, setSearchTerm] = useState('');
 
     const handleToggleDropdown = () => {
         setIsDropdownOpen(prevState => !prevState);
@@ -13,8 +14,19 @@ const Button = ({ label, options, disabled }) => {
     const handleOptionSelect = (option) => {
         setSelectedOption(option);
         setIsDropdownOpen(false); 
+        setSearchTerm(''); 
     };
+
+    const handleSearchChange = (event) => {
+        setSearchTerm(event.target.value); 
+    };
+
+    const filteredOptions = options.filter(option =>
+        option.label.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+
     const ref = useOnClickOut({ onClickOut: () => setIsDropdownOpen(false) });
+
     return (
         <div ref={ref} className={styles.dropdownContainer}>
             <button 
@@ -26,15 +38,28 @@ const Button = ({ label, options, disabled }) => {
             </button>
             {isDropdownOpen && (
                 <div className={styles.dropdownMenu}>
-                    {options.map((option, index) => (
-                        <div 
-                            key={index} 
-                            className={styles.dropdownItem} 
-                            onClick={() => handleOptionSelect(option.label)} // Assuming option has a label property
-                        >
-                            {option.label}
-                        </div>
-                    ))}
+                    {includeSearch &&
+                        <input
+                            type="text"
+                            placeholder="Search..."
+                            value={searchTerm}
+                            onChange={handleSearchChange}
+                            className={styles.searchInput} 
+                        />
+                    }
+                    {filteredOptions.length > 0 ? (
+                        filteredOptions.map((option, index) => (
+                            <div 
+                                key={index} 
+                                className={styles.dropdownItem} 
+                                onClick={() => handleOptionSelect(option.label)} 
+                            >
+                                {option.label}
+                            </div>
+                        ))
+                    ) : (
+                        <div className={styles.noResults}>No results found</div>
+                    )}
                 </div>
             )}
         </div>

@@ -65,16 +65,16 @@ function MessageList({ messageList, loading }: Props) {
     
         switch (columnIndex) {
             case 0:
-                cellContent = message.status_code;
-                break;
-            case 1:
                 cellContent = message.path;
                 textColor = '#2563eb'; 
                 break;
-            case 2:
+            case 1:
                 cellContent = message.error;
                 textColor = '#dc2626'; 
                 justifyContent = 'flex-start';
+                break;
+            case 2:
+                cellContent = message.status_code;
                 break;
             case 3:
                 cellContent = message.formattedTimestamp;
@@ -94,7 +94,7 @@ function MessageList({ messageList, loading }: Props) {
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: justifyContent,
-                    color: textColor
+                    color: textColor,
                 }}
             >
                 {cellContent}
@@ -112,9 +112,9 @@ function MessageList({ messageList, loading }: Props) {
             <h4 className="sub-title">Recent Messages</h4>
             <div>
                 <div className={styles.headerRow}>
-                    <div className={styles.headerItem} style={{ width: columnWidth({ index: 0 }) }}>Status Code</div>
-                    <div className={styles.headerItem} style={{ width: columnWidth({ index: 1 }) }}>Path</div>
-                    <div className={classNames(styles.headerItem, styles.errorCell)} style={{ width: columnWidth({ index: 2 }) }}>Error</div>
+                    <div className={styles.headerItem} style={{ width: columnWidth({ index: 0 }) }}>Path</div>
+                    <div className={classNames(styles.headerItem, styles.errorCell)} style={{ width: columnWidth({ index: 1 }) }}>Error</div>
+                    <div className={styles.headerItem} style={{ width: columnWidth({ index: 2 }) }}>Status Code</div>
                     <div className={classNames(styles.headerItem, styles.timestampCell)} style={{ width: columnWidth({ index: 3 }) }}>Timestamp
                         <i className="fa-duotone fa-solid fa-sort-down"></i>
                     </div>
