@@ -31,9 +31,12 @@ interface Props {
 }
 
 function HealthDashboard({}: Props) {
-    const [statusSelect, setStatusSelect] = useState<StatusSelect>('5xx');
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(false);
+    const [statusdropdown, setStatusdropdown] = useState(null);
+    const [timedropdown, setTimedropdown] = useState(null);
+    const [pathdropdown, setPathdropdown] = useState(null);
+    const [statusSelect, setStatusSelect] = useState<StatusSelect>('5xx');
 
     useEffect(() =>{
         setLoading(true);
@@ -45,66 +48,93 @@ function HealthDashboard({}: Props) {
         },3000)
     },[])
 
+    useEffect(()=>{
+        const filtered = mockData.filter(item => {
+            const matchesTime = timedropdown ? item.timestamp === timedropdown : true;
+
+            const matchesStatus = statusdropdown ? item.status_code.toString().charAt(0) + 'xx' === statusdropdown : true;
+
+            const matchesPath = pathdropdown ? item.path === pathdropdown : true;
+
+            return matchesTime && matchesStatus && matchesPath;
+        });
+
+        if(timedropdown || statusdropdown || pathdropdown){
+            setStatusSelect(null)
+        }
+        setData(filtered); 
+    }, [timedropdown, statusdropdown, pathdropdown]) 
+
     const dropdownOptions = useMemo(() => {
         const timeOptions = [
-            ...new Set(mockData.map(item => {
-                return new Date(item.timestamp).toLocaleString('en-US', {
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric',
-                    hour: '2-digit',
-                    minute: '2-digit',
-                    second: '2-digit',
-                    hour12: true
-                });
-            }))
-        ]; 
-        const endpointOptions = [...new Set(mockData.map(item => item.path))]; 
-        const statusOptions = [...new Set(mockData.map(item => item.status_code.toString().charAt(0) + 'xx'))]; 
+            ...new Set(mockData.map(item => item.timestamp))
+        ].map(value => ({ 
+            label: new Date(value).toLocaleString('en-US', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit',
+                hour12: true
+            })
+            , value })); // Map to the desired format
+
+        const endpointOptions = [...new Set(mockData.map(item => item.path))] // Simplified mapping
+            .map(value => ({ value, label: value }));
+
+        const statusOptions = [...new Set(mockData.map(item => item.status_code.toString().charAt(0) + 'xx'))] // Simplified mapping
+            .map(value => ({ value, label: value }));
     
         return [
             {
                 label: 'Time Range',
                 value: 'time',
-                options: timeOptions.map(time => ({ label: time, value: time })), 
-                includeSearch: true
+                options: [{label: 'No Filter', value: null}, ...timeOptions], 
+                includeSearch: true,
+                change: setTimedropdown,
+                selected: timedropdown
             },
             {
                 label: 'Endpoint',
                 value: 'endpoint',
-                options: endpointOptions.map(endpoint => ({ label: endpoint, value: endpoint })), 
+                options: [{label: 'No Filter', value: null}, ...endpointOptions], 
+                change: setPathdropdown,
+                selected: pathdropdown
             },
             {
                 label: 'Status',
                 value: 'status',
-                options: statusOptions.map(status => ({ label: status, value: status })), 
+                options: [{label: 'No Filter', value: null}, ...statusOptions], 
+                change: setStatusdropdown,
+                selected: statusdropdown
             },
         ];
-    }, []);
+    }, [pathdropdown, statusdropdown, timedropdown]); 
 
     const summarySec = useMemo(()=>{
         return [
             {
                 label: "Success Rate",
-                metric: `${calculateSuccessRate(data)}%`,
+                metric: data.length > 0 ? `${calculateSuccessRate(data)}%` : 'N/A',
                 color: 'green',
                 info: "Success Rate = (Successful Requests / Total Requests) × 100"
             },
             {
                 label: "Ave Response Time",
-                metric: `${calculateAverageResponseTime(data)}ms`,
+                metric: data.length > 0 ? `${calculateAverageResponseTime(data)}ms` : 'N/A',
                 color: 'blue',
                 info: "Average Response Time = Total Response Time (ms) / Total Number of Requests"
             },
             {
                 label: "Error Rate",
-                metric: `${calculateErrorRate(data)}%`,
+                metric: data.length > 0 ? `${calculateErrorRate(data)}%` : 'N/A',
                 color: 'red',
                 info: "Error Rate = (Number of Error Responses / Total Requests) × 100. Error responses are any requests with status codes 400 or higher"
             },
             {
                 label: "Total Requests",
-                metric: `${abbreviateNumber(data?.length)}`,
+                metric: data.length > 0 ? `${abbreviateNumber(data?.length)}` : 'N/A',
                 color: 'purple'
             },
         ]
@@ -124,8 +154,8 @@ function HealthDashboard({}: Props) {
         <div className={styles.healthDashboard}>
             <h1>API Health Dashboard</h1>
             <div className={classNames(styles.toggleContainer, 'generic-container')}>
-                {dropdownOptions.map(({label, value, options, includeSearch}) => {
-                    return <Button options={options} label={label} value={value} disabled={loading} includeSearch={includeSearch}/>
+                {dropdownOptions.map(({label, value, options, includeSearch, change, selected}) => {
+                    return <Button options={options} label={label} value={value} disabled={loading} includeSearch={includeSearch} change={change} selected={selected}/>
                 })}
             </div>
             <div className={styles.summaryContainer}>

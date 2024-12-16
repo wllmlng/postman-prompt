@@ -23,6 +23,8 @@ interface Props {
 function MessageList({ messageList, loading }: Props) {
     const listRef = useRef<HTMLDivElement>(null);
     const [listWidth, setListWidth] = useState(0);
+    // const MIN_COLUMN_WIDTH = 150; 
+
 
     useEffect(() => {
         if (listRef.current) {
@@ -102,20 +104,25 @@ function MessageList({ messageList, loading }: Props) {
         );
     };
 
-    const columnWidth = () => {
-        const numberOfColumns = 4; 
-        return Math.floor(listWidth / numberOfColumns); 
+    const columnWidth = ({ index }) => {
+        const totalWidth = listWidth; 
+    
+        if (index === 0 || index === 2) {
+            return totalWidth * 0.15;
+        } else {
+            return totalWidth * 0.35
+        }
     };
 
     return (
         <div ref={listRef} className={classNames(styles.messageList ,'generic-container')} style={{ width: '100%', overflow: 'scroll' }}>
             <h4 className="sub-title">Recent Messages</h4>
-            <div>
-                <div className={styles.headerRow}>
-                    <div className={styles.headerItem} style={{ width: columnWidth({ index: 0 }) }}>Path</div>
-                    <div className={classNames(styles.headerItem, styles.errorCell)} style={{ width: columnWidth({ index: 1 }) }}>Error</div>
-                    <div className={styles.headerItem} style={{ width: columnWidth({ index: 2 }) }}>Status Code</div>
-                    <div className={classNames(styles.headerItem, styles.timestampCell)} style={{ width: columnWidth({ index: 3 }) }}>Timestamp
+            <div style={{ overflow: 'scroll' }}>
+                <div className={styles.headerRow} style={{ overflow: 'scroll' }}>
+                    <div className={styles.headerItem} style={{ minWidth: columnWidth({ index: 0 }) }}>Path</div>
+                    <div className={classNames(styles.headerItem, styles.errorCell)} style={{ minWidth: columnWidth({ index: 1 }) }}>Error</div>
+                    <div className={styles.headerItem} style={{ minWidth: columnWidth({ index: 2 }) }}>Status Code</div>
+                    <div className={classNames(styles.headerItem, styles.timestampCell)} style={{ minWidth: columnWidth({ index: 3 }) }}>Timestamp
                         <i className="fa-duotone fa-solid fa-sort-down"></i>
                     </div>
                 </div>
@@ -134,3 +141,4 @@ function MessageList({ messageList, loading }: Props) {
 }
 
 export default MessageList;
+

@@ -2,19 +2,19 @@ import React, { useState } from 'react';
 import styles from './Button.module.scss';
 import useOnClickOut from '@hooks/useOnClickOut.tsx';
 
-const Button = ({ label, options, disabled, includeSearch=false }) => {
+const Button = ({ label, options, disabled, includeSearch=false, change, selected }) => {
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-    const [selectedOption, setSelectedOption] = useState(label);
+    const [selectedOption, setSelectedOption] = useState('');
     const [searchTerm, setSearchTerm] = useState('');
 
     const handleToggleDropdown = () => {
         setIsDropdownOpen(prevState => !prevState);
     };
 
-    const handleOptionSelect = (option) => {
-        setSelectedOption(option);
+    const handleOptionSelect = (value) => {
         setIsDropdownOpen(false); 
         setSearchTerm(''); 
+        change(value);
     };
 
     const handleSearchChange = (event) => {
@@ -34,7 +34,7 @@ const Button = ({ label, options, disabled, includeSearch=false }) => {
                 className={`${styles.button} ${isDropdownOpen ? styles.toggled : ''} font-light`} 
                 onClick={handleToggleDropdown}
             >
-                {selectedOption}
+                {label}
             </button>
             {isDropdownOpen && (
                 <div className={styles.dropdownMenu}>
@@ -52,7 +52,8 @@ const Button = ({ label, options, disabled, includeSearch=false }) => {
                             <div 
                                 key={index} 
                                 className={styles.dropdownItem} 
-                                onClick={() => handleOptionSelect(option.label)} 
+                                onClick={() => handleOptionSelect(option.value)} 
+                                style={{backgroundColor: option.value === selected ? 'grey' : 'transparent'}}
                             >
                                 {option.label}
                             </div>
