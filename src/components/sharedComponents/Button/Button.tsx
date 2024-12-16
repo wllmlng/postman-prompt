@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import styles from './Button.module.scss';
 
-const Button = ({label, metric}) => {
+const Button = ({label, metric, disabled}) => {
     const [isToggled, setIsToggled] = useState(false);
 
     const handleToggle = () => {
@@ -10,6 +10,7 @@ const Button = ({label, metric}) => {
 
     return (
         <button 
+            disabled={disabled}
             className={`${styles.button} ${isToggled ? styles.toggled : ''} font-light`} 
             onClick={handleToggle}
         >

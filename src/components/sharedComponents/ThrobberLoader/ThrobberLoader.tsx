@@ -12,14 +12,11 @@ type Props = {
 
 /* <ThrobberLoader />
 ============================================================================= */
-const ThrobberLoader: React.FC<Props> = ({ className, overlay, style }) => {
+const ThrobberLoader: React.FC<Props> = ({ className, width=200, height=50 }) => {
   return (
-    <div className={classNames(className, { [styles.overlay]: overlay })} style={style}>
-      <div className={styles.container}>
-        <div className={styles.throbberLoader}>Loading</div>
-      </div>
-    </div>
+    <span className={classNames(styles.skeletonLoader, className)} style={{ width, height }} />
   );
 };
 
 export default ThrobberLoader;
+

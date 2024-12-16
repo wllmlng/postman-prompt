@@ -1,5 +1,5 @@
 //External Libraries
-import React, {useMemo, useState} from 'react';
+import React, {useMemo, useEffect, useState} from 'react';
 import classNames from 'classnames';
 //Api Calls
 
@@ -18,7 +18,7 @@ import MessageList from '@sharedComponents/MessageList/MessageList.tsx';
 //Types
 
 //Constants
-import data from '../../Data/mock-request-data.json'
+import mockData from '../../Data/mock-request-data.json'
 
 //Styles
 import styles from './HealthDashboard.module.scss'
@@ -46,54 +46,47 @@ interface Props {
 
 function HealthDashboard({}: Props) {
     const [statusSelect, setStatusSelect] = useState<StatusSelect>('5xx');
+    const [data, setData] = useState([]);
+    const [loading, setLoading] = useState(false);
+
+    useEffect(() =>{
+        setLoading(true);
+
+        //Simulating api requests
+        setTimeout(() => {
+            setData(mockData);
+            setLoading(false)
+        },3000)
+    },[])
 
     
-    const summarySec = [
-        {
-            label: "Success Rate",
-            metric: `${calculateSuccessRate(data)}%`,
-            color: 'green',
-            info: "Success Rate = (Successful Requests / Total Requests) × 100"
-        },
-        {
-            label: "Ave Response Time",
-            metric: `${calculateAverageResponseTime(data)}ms`,
-            color: 'blue',
-            info: "Average Response Time = Total Response Time (ms) / Total Number of Requests"
-        },
-        {
-            label: "Error Rate",
-            metric: `${calculateErrorRate(data)}%`,
-            color: 'red',
-            info: "Error Rate = (Number of Error Responses / Total Requests) × 100. Error responses are any requests with status codes 400 or higher"
-        },
-        {
-            label: "Total Requests",
-            metric: `${abbreviateNumber(data?.length)}`,
-            color: 'purple'
-        },
-    ]
-    
-    // Example usage:
-    const sampleData = [
-        {
-            error: "",
-            path: "/",
-            response_time: 852,
-            status_code: 201,
-            timestamp: "2023-09-01T01:09:24.000Z"
-        },
-        {
-            error: "ERR_HTTP2_ERROR",
-            path: "/",
-            response_time: 792,
-            status_code: 500,
-            timestamp: "2023-09-01T01:14:48.000Z"
-        }
-    ];
-    
-    const successRate = calculateSuccessRate(sampleData);
-    console.log(`Success Rate: ${successRate}%`); // Output: Success Rate: 50%
+    const summarySec = useMemo(()=>{
+        return [
+            {
+                label: "Success Rate",
+                metric: `${calculateSuccessRate(data)}%`,
+                color: 'green',
+                info: "Success Rate = (Successful Requests / Total Requests) × 100"
+            },
+            {
+                label: "Ave Response Time",
+                metric: `${calculateAverageResponseTime(data)}ms`,
+                color: 'blue',
+                info: "Average Response Time = Total Response Time (ms) / Total Number of Requests"
+            },
+            {
+                label: "Error Rate",
+                metric: `${calculateErrorRate(data)}%`,
+                color: 'red',
+                info: "Error Rate = (Number of Error Responses / Total Requests) × 100. Error responses are any requests with status codes 400 or higher"
+            },
+            {
+                label: "Total Requests",
+                metric: `${abbreviateNumber(data?.length)}`,
+                color: 'purple'
+            },
+        ]
+    },[data]) 
 
     const messageList = useMemo(() => {
         if(!statusSelect) return data;
@@ -103,19 +96,19 @@ function HealthDashboard({}: Props) {
                    (statusCode.startsWith('4') && statusSelect === '4xx') ||
                    (statusCode.startsWith('5') && statusSelect === '5xx');
         });
-    },[statusSelect])
+    },[statusSelect, data])
 
     return (
         <div className={styles.healthDashboard}>
             <h1>API Health Dashboard</h1>
             <div className={classNames(styles.toggleContainer, 'generic-container')}>
                 {VIEWS.map(({label, value}) => {
-                    return <Button label={label} value={value} />
+                    return <Button label={label} value={value} disabled={loading} />
                 })}
             </div>
             <div className={styles.summaryContainer}>
                 {summarySec.map(({label, metric, color, info})=>{
-                    return <MetricCard label={label} metric={metric} color={color} info={info}/>
+                    return <MetricCard label={label} metric={metric} color={color} info={info} data={data} loading={loading}/>
                 })}
             </div>
             <TrendChart />

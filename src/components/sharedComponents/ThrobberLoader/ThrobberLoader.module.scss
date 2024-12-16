@@ -1,68 +1,34 @@
-@import 'mixins.scss';
-@import 'constants.scss';
-
-$lightState: lighten(#476c8e, 20%);
-$darkState: $defaultBackgroundColor;
-
-.overlay {
-  @extend %overlay;
-  align-items: center;
-  background-color: var(--themewhite);
-  display: flex;
-  opacity: 0.85;
-  justify-content: center;
-  z-index: 10;
-  border-radius: $panelBorderRadius;
-}
-
-@keyframes throbber-loader {
-  0% {
-    background: $lightState;
+.skeletonLoader {
+    display: inline-block;
+    height: 1em;
+    position: relative;
+    overflow: hidden;
+    background-color: #dddbdd;
+    border-radius: 4px;
+  
+    &::after {
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      transform: translateX(-100%);
+      background-image: linear-gradient(90deg, rgba(#fff, 0) 0, rgba(#fff, 0.2) 20%, rgba(#fff, 0.5) 60%, rgba(#fff, 0));
+      animation: shimmer 2s infinite;
+      content: '';
+    }
+  
+    @keyframes shimmer {
+      100% {
+        transform: translateX(100%);
+      }
+    }
   }
-  10% {
-    background: $darkState;
+  
+  [data-theme='dark'] .skeletonLoader {
+    background: #50535a;
+    &::after {
+      background-image: linear-gradient(to right, #50535a 0%, #656871 20%, #50535a 40%, #50535a 100%);
+    }
   }
-  40% {
-    background: $lightState;
-  }
-}
-
-.throbberLoader:not(:required) {
-  animation: throbber-loader 2000ms 300ms infinite ease-out;
-  background: $lightState;
-  display: inline-block;
-  height: 1.5em;
-  margin: 0 1.6em;
-  position: relative;
-  text-indent: -9999px;
-  width: 0.9em;
-}
-.throbberLoader:not(:required):before,
-.throbberLoader:not(:required):after {
-  background: $lightState;
-  content: '\x200B';
-  display: inline-block;
-  height: 1.5em;
-  position: absolute;
-  top: 0;
-  width: 0.9em;
-}
-.throbberLoader:not(:required):before {
-  animation: throbber-loader 2000ms 150ms infinite ease-out;
-  left: -1.6em;
-}
-.throbberLoader:not(:required):after {
-  animation: throbber-loader 2000ms 450ms infinite ease-out;
-  right: -1.6em;
-}
-
-.container {
-  text-align: center;
-  font-size: 1em;
-}
-
-@media print {
-  .container {
-    display: none;
-  }
-}
+  

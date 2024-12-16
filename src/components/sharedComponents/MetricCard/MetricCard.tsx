@@ -9,6 +9,7 @@ import classNames from 'classnames'
 
 //Components
 import HoverInfo from '@sharedComponents/HoverInfo/HoverInfo.tsx'
+import ThrobberLoader from '@sharedComponents/ThrobberLoader/ThrobberLoader.tsx'
 
 //Types
 
@@ -24,9 +25,10 @@ interface Props {
     metric: string;
     color: string;
     info?: string;
+    loading?: boolean;
 }
 
-function MetricCard({label, metric, color, info}: Props) {
+function MetricCard({label, metric, color, info, data, loading}: Props) {
 
     return (
         <div className={classNames(styles.container, 'generic-container')}>
@@ -38,9 +40,13 @@ function MetricCard({label, metric, color, info}: Props) {
                     </HoverInfo>
                 }
             </span>
-            <div className={styles.metricContainer} style={{color: color}}>
-                {metric}
-            </div>
+            {loading ? 
+                <ThrobberLoader />
+            :
+                <div className={styles.metricContainer} style={{color: color}}>
+                    {metric}
+                </div>
+            }
         </div>
     )
 }
