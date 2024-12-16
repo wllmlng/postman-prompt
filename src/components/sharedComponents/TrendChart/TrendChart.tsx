@@ -1,5 +1,5 @@
 //External Libraries
-import React from 'react';
+import React, { useEffect, useRef} from 'react';
 import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from 'chart.js';
 import { Line } from 'react-chartjs-2';
 import classNames from 'classnames';
@@ -17,7 +17,6 @@ import HighchartsReact from 'highcharts-react-official';
 //Types
 
 //Constants
-import data from '../../../Data/mock-request-data.json'
 
 //Styles
 import styles from './TrendChart.module.scss'
@@ -38,9 +37,21 @@ ChartJS.register(
 
 interface Props { }
 
-const TrendChart = () => {
+const TrendChart = ({data, loading}) => {
     const sortedData = data.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
 
+    const chartRef = useRef(null);
+
+    useEffect(() => {
+        if (chartRef.current) {
+            const chart = chartRef.current.chart;
+            if (loading) {
+                chart.showLoading('Loading data...');
+            } else {
+                chart.hideLoading();
+            }
+        }
+    }, [loading]);
 
     const options = {
         chart: {
@@ -119,6 +130,7 @@ const TrendChart = () => {
             <div className={styles.chartContainer} >
                 <div style={{width:'95%'}}>
                     <HighchartsReact 
+                        ref={chartRef}
                         highcharts={Highcharts} 
                         options={options} 
                     />

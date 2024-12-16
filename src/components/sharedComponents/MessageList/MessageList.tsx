@@ -3,6 +3,8 @@ import React, { useMemo, useState, useEffect, useRef } from 'react';
 import { Grid } from 'react-virtualized';
 import 'react-virtualized/styles.css'; // Import styles for react-virtualized
 import classNames from 'classnames';
+//Components
+import ThrobberLoader from '@sharedComponents/ThrobberLoader/ThrobberLoader.tsx'
 // Styles
 import styles from './MessageList.module.scss';
 
@@ -18,7 +20,7 @@ interface Props {
     }[];
 }
 
-function MessageList({ messageList }: Props) {
+function MessageList({ messageList, loading }: Props) {
     const listRef = useRef<HTMLDivElement>(null);
     const [listWidth, setListWidth] = useState(0);
 
@@ -38,6 +40,24 @@ function MessageList({ messageList }: Props) {
     },[messageList]) 
 
     const cellRenderer = ({ columnIndex, key, rowIndex, style }) => {
+
+        if(loading){
+            return (
+                <div
+                    key={key}
+                    style={{
+                        ...style,
+                        border: '1px solid #ddd',
+                        backgroundColor: rowIndex % 2 ? '#f9f9f9' : 'white',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center'
+                    }}
+                >   
+                    <ThrobberLoader height={20} width={100} />
+                </div>
+            );
+        }
         const message = formattedMessages[rowIndex];
         let cellContent;
         let textColor = 'black'; 
@@ -104,7 +124,7 @@ function MessageList({ messageList }: Props) {
                     columnCount={4} 
                     columnWidth={columnWidth} 
                     height={300} 
-                    rowCount={formattedMessages.length} 
+                    rowCount={loading ? 20 : formattedMessages.length} 
                     rowHeight={40} 
                     width={listWidth} 
                 />

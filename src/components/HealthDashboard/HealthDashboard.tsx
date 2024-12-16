@@ -111,10 +111,10 @@ function HealthDashboard({}: Props) {
                     return <MetricCard label={label} metric={metric} color={color} info={info} data={data} loading={loading}/>
                 })}
             </div>
-            <TrendChart />
+            <TrendChart data={data} loading={loading}/>
             <div className={styles.bottomCharts}>
-                <BarChart statusSelect={statusSelect} setStatusSelect={setStatusSelect}/>
-                <MessageList messageList={messageList} />
+                <BarChart statusSelect={statusSelect} setStatusSelect={setStatusSelect}  data={data} loading={loading}/>
+                <MessageList messageList={messageList} loading={loading}/>
             </div>
         </div>
     )

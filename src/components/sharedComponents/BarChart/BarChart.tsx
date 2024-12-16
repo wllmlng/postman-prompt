@@ -20,13 +20,12 @@ import styles from './BarChart.module.scss'
 
 //-----------------End Imports-----------------
 
-import data from '../../../Data/mock-request-data.json'
 
 interface Props {
     setStatusSelect: (val:string) => void
 }
 
-function BarChart({statusSelect, setStatusSelect}: Props) {
+function BarChart({statusSelect, setStatusSelect, data, loading}: Props) {
 
     const statusCounts = data.reduce((acc, curr) => {
         const statusCode = `${curr.status_code}`;
@@ -131,13 +130,82 @@ function BarChart({statusSelect, setStatusSelect}: Props) {
         }]
     };
 
+    const loadOptions = {
+        chart: {
+            type: 'bar',
+            height: 300 
+        },
+        credits: {
+            enabled: false 
+        },
+        title: {
+            text: ''
+        },
+        legend: {
+            enabled: false 
+        },
+        tooltip: {
+            enabled: false 
+        },
+        xAxis: {
+            categories: ['2xx', '4xx', '5xx'], 
+            title: {
+                text: null 
+            },
+            labels: {
+                enabled: false 
+            }
+        },
+        yAxis: {
+            min: 0,
+            title: {
+                text: null 
+            },
+            labels: {
+                enabled: false 
+            }
+        },
+        plotOptions: {
+            series: {
+                dataLabels: {
+                    enabled: false, 
+                },
+            },
+        },
+        series: [{
+            data: [
+                { 
+                    y: 420, 
+                    color: '#80808050', 
+                }, 
+                { 
+                    y: 200, 
+                    color: '#80808050', 
+                }, 
+                { 
+                    y: 330, 
+                    color: '#80808050', 
+                }  
+            ],
+            point: {
+                events: {
+                    click: function () {
+                        setStatusSelect((prev)=>{
+                            return prev === this.category ? null : this.category
+                        }); 
+                    },
+                },
+            },            
+        }]
+    };
+
     return (
         <div className={'generic-container'}>
             <h4 className="sub-title">Status Code Distribution</h4>
             <div className={styles.barChartContainer}>
                 <HighchartsReact
                     highcharts={Highcharts}
-                    options={options}
+                    options={loading ? loadOptions : options}
                 />
             </div>
         </div>
