@@ -43,11 +43,11 @@ function AiAnalyzer({setLoading}: Props) {
         try {
             const analysisRequest = {
                 data: mockData,
-                prompt: "Analyze the following data for trends and patterns. Identify ONLY problematic paths causing bad status codes. Return the common error messages in the results. Keep response professional, short and consice. Use emojis to highlight headings. Also include <strong /> and <br /> in response for displaying information.",
+                prompt: "Analyze the following data for trends and patterns. Identify ONLY problematic paths causing bad status codes. Use <strong /> for bolding text and <br /> to break lines in response. Return the common error messages in the results. Keep response professional, short and consice. Use emojis to highlight headings.",
             };
         
             const anthropic = new Anthropic({
-                apiKey: process.env.ANTHROPIC_API_KEY, 
+                apiKey: process.env.REACT_APP_ANTHROPIC_API_KEY, 
                 dangerouslyAllowBrowser: true
             });
         
@@ -72,6 +72,7 @@ function AiAnalyzer({setLoading}: Props) {
             setAnalysis(response.content[0].text); 
             openModal();
         } catch (err) {
+            console.log(err)
             setAnalysis(mockResults);
         } finally {
             setLoading(false);
