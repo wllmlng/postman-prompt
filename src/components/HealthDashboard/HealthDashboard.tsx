@@ -14,7 +14,7 @@ import Button from '@sharedComponents/Button/Button.tsx'
 import TrendChart from '@sharedComponents/TrendChart/TrendChart.tsx'
 import BarChart from '@sharedComponents/BarChart/BarChart.tsx';
 import MessageList from '@sharedComponents/MessageList/MessageList.tsx';
-
+import AiAnalyzer from '../AiAnalyzer/AiAnalyzer.tsx'
 //Types
 
 //Constants
@@ -154,9 +154,14 @@ function HealthDashboard({}: Props) {
         <div className={styles.healthDashboard}>
             <h1>API Health Dashboard</h1>
             <div className={classNames(styles.toggleContainer, 'generic-container')}>
-                {dropdownOptions.map(({label, value, options, includeSearch, change, selected}) => {
-                    return <Button options={options} label={label} value={value} disabled={loading} includeSearch={includeSearch} change={change} selected={selected}/>
-                })}
+                <div className={styles.dropdownContainer}>
+                    {dropdownOptions.map(({label, value, options, includeSearch, change, selected}) => {
+                        return <Button options={options} label={label} value={value} disabled={loading} includeSearch={includeSearch} change={change} selected={selected}/>
+                    })}
+                </div>
+                <div>
+                    <AiAnalyzer setLoading={setLoading} />
+                </div>
             </div>
             <div className={styles.summaryContainer}>
                 {summarySec.map(({label, metric, color, info})=>{
