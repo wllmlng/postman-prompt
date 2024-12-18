@@ -4,7 +4,6 @@ import useOnClickOut from '@hooks/useOnClickOut.tsx';
 
 const Button = ({ label, options, disabled, includeSearch=false, change, selected }) => {
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-    const [selectedOption, setSelectedOption] = useState('');
     const [searchTerm, setSearchTerm] = useState('');
 
     const handleToggleDropdown = () => {

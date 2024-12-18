@@ -1,7 +1,7 @@
 // External Libraries
 import React, { useMemo, useState, useEffect, useRef } from 'react';
 import { Grid } from 'react-virtualized';
-import 'react-virtualized/styles.css'; // Import styles for react-virtualized
+import 'react-virtualized/styles.css'; 
 import classNames from 'classnames';
 //Components
 import ThrobberLoader from '@sharedComponents/ThrobberLoader/ThrobberLoader.tsx'
@@ -18,12 +18,12 @@ interface Props {
         status_code: number;
         timestamp: string;
     }[];
+    loading?: boolean;
 }
 
 function MessageList({ messageList, loading }: Props) {
     const listRef = useRef<HTMLDivElement>(null);
     const [listWidth, setListWidth] = useState(0);
-    // const MIN_COLUMN_WIDTH = 150; 
 
 
     useEffect(() => {

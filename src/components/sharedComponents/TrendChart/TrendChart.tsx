@@ -1,7 +1,6 @@
 //External Libraries
 import React, { useEffect, useRef} from 'react';
 import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from 'chart.js';
-import { Line } from 'react-chartjs-2';
 import classNames from 'classnames';
 import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
@@ -35,9 +34,11 @@ ChartJS.register(
     Legend
   );
 
-interface Props { }
+interface Props { 
+    loading?: boolean;
+}
 
-const TrendChart = ({data, loading}) => {
+const TrendChart = ({data, loading}: Props) => {
     const sortedData = data.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
 
     const chartRef = useRef(null);
@@ -75,7 +76,7 @@ const TrendChart = ({data, loading}) => {
             tickInterval: 5,
             labels: {
                 formatter: function () {
-                    return new Date(this.value).toLocaleDateString(); // Format the tick labels
+                    return new Date(this.value).toLocaleDateString(); 
                 },
       
             }
@@ -90,7 +91,7 @@ const TrendChart = ({data, loading}) => {
             data: sortedData.map(({ response_time }) => response_time)
         }],
         rangeSelector: {
-            selected: 1, // Default to the second button (1 month)
+            selected: 1, 
             buttons: [{
                 type: 'day',
                 count: 1,
@@ -112,7 +113,6 @@ const TrendChart = ({data, loading}) => {
             enabled: true,
             buttons: {
                 contextButton: {
-                    // Customize which download options to show
                     menuItems: [
                         'downloadPNG',
                         'downloadJPEG',

@@ -55,3 +55,6 @@ Design and implement a data visualization component that represents the performa
 
 8. **AI Tool for Fun**:
    - The AI tool is included more for fun and serves as a quick way to provide analysis. While it may not be the core focus, it adds an interesting element to the dashboard.
+
+### 🌐 Demo Link
+- You can view a live demo of the project at [Postman Prompt Demo](https://postman-prompt.vercel.app/).

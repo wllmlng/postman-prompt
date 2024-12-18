@@ -41,7 +41,6 @@ function HealthDashboard({}: Props) {
     useEffect(() =>{
         setLoading(true);
 
-        //Simulating api requests
         setTimeout(() => {
             setData(mockData);
             setLoading(false)
@@ -78,12 +77,12 @@ function HealthDashboard({}: Props) {
                 second: '2-digit',
                 hour12: true
             })
-            , value })); // Map to the desired format
+            , value })); 
 
-        const endpointOptions = [...new Set(mockData.map(item => item.path))] // Simplified mapping
+        const endpointOptions = [...new Set(mockData.map(item => item.path))] 
             .map(value => ({ value, label: value }));
 
-        const statusOptions = [...new Set(mockData.map(item => item.status_code.toString().charAt(0) + 'xx'))] // Simplified mapping
+        const statusOptions = [...new Set(mockData.map(item => item.status_code.toString().charAt(0) + 'xx'))] 
             .map(value => ({ value, label: value }));
     
         return [
