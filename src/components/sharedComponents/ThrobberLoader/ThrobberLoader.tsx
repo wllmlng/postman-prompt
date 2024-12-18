@@ -12,7 +12,7 @@ type Props = {
 
 /* <ThrobberLoader />
 ============================================================================= */
-const ThrobberLoader: React.FC<Props> = ({ className, width=200, height=50 }) => {
+const ThrobberLoader: React.FC<Props> = ({ className, width, height=50 }) => {
   return (
     <span className={classNames(styles.skeletonLoader, className)} style={{ width, height }} />
   );

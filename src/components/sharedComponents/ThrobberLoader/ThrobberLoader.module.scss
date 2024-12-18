@@ -5,6 +5,8 @@
     overflow: hidden;
     background-color: #dddbdd;
     border-radius: 4px;
+    width: 100%;
+    max-width: 200px;
   
     &::after {
       position: absolute;
