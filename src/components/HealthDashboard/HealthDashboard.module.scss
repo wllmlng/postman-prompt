@@ -16,6 +16,7 @@
 
     .toggleContainer{
         display: flex;
+        flex-wrap: wrap;
         justify-content: space-between;
         padding: 12px;
         gap: 10px;
@@ -23,6 +24,7 @@
 
         .dropdownContainer{
             display: flex;
+            flex-wrap: wrap;
         }
 
     }

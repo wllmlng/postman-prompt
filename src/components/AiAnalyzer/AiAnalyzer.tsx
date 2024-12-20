@@ -81,7 +81,7 @@ function AiAnalyzer({setLoading}: Props) {
 
     return (
         <>
-            <button className={styles.fancyButton} onClick={analyzeDataWithAI}>Analyze with AI</button>
+            <button className={styles.fancyButton} onClick={analyzeDataWithAI}>Find Patterns</button>
             {isModalOpen && (
                 <div className={styles.modalOverlay}>
                     <div className={styles.modalContent}>

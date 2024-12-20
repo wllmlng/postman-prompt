@@ -67,6 +67,19 @@ const TrendChart = ({data, loading}: Props) => {
         title: {
             text: ''
         },
+        tooltip: {
+            shared: true, 
+            useHTML: true, 
+            formatter: function () {
+                console.log(this)
+                const points = this.points; 
+                let tooltipHtml = `<strong>${this?.category}</strong><br/>`;
+                points.forEach(point => {
+                    tooltipHtml += `Response Rate: <strong>${point.y} ms</strong><br/>`; 
+                });
+                return tooltipHtml; 
+            }
+        },
         xAxis: {
             type: 'datetime',
             title: {
